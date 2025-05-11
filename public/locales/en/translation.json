@@ -1,0 +1,41 @@
+{
+  "common": {
+    "welcome": "Welcome to ERikshaWave",
+    "tagline": "Your Last-Mile Travel Solution",
+    "description": "Book e-rickshaws for quick, eco-friendly last mile connectivity. Skip the hassle of finding transport and enjoy convenient, affordable rides.",
+    "bookNow": "Book Now",
+    "viewHistory": "View History",
+    "login": "Login",
+    "register": "Register",
+    "support": {
+      "title": "Need Help?",
+      "description": "Our support team is here to assist you 24/7",
+      "call": {
+        "title": "Call Us",
+        "description": "Available 24/7 for urgent assistance"
+      },
+      "chat": {
+        "title": "Live Chat",
+        "description": "Chat with our support team instantly"
+      },
+      "email": {
+        "title": "Email Support",
+        "description": "Get detailed assistance via email"
+      }
+    },
+    "features": {
+      "easyBooking": {
+        "title": "Easy Booking",
+        "description": "Book rides with just a few taps"
+      },
+      "quickPickup": {
+        "title": "Quick Pickup",
+        "description": "Get picked up within minutes"
+      },
+      "rideHistory": {
+        "title": "Ride History",
+        "description": "Track all your past rides"
+      }
+    }
+  }
+}
