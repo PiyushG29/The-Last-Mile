@@ -3,6 +3,9 @@
   "bookNow": "Book Now",
   "viewHistory": "View History",
   "logout": "Logout",
+  "nav": {
+    "chat": "Chat"
+  },
   "welcomeToTheLastMile": "Welcome to The Last Mile",
   "tagline": "Your Last Mile Travel Solution",
   "description": "Book e-rickshaws for quick, eco-friendly last mile connectivity. Skip the hassle of finding transport and enjoy convenient, affordable rides.",
@@ -32,6 +35,56 @@
       "description": "Share your location and chat with friends and family in real-time"
     }
   },
+  "home": {
+    "statusBadge": "Electric rides near you",
+    "hero": {
+      "bookYour": "Book Your",
+      "eRickshaw": "E-Rickshaw.",
+      "fast": "Fast",
+      "localRides": "Local Rides.",
+      "cleaner": "Cleaner",
+      "cities": "Cities."
+    },
+    "stats": {
+      "rides": "rides",
+      "rating": "rating",
+      "co2Saved": "CO2 saved"
+    },
+    "rideTools": "Ride tools",
+    "pickupBadge": {
+      "title": "6 min pickup",
+      "description": "Driver assigned nearby"
+    },
+    "cleanBadge": {
+      "title": "Cleaner commute",
+      "description": "Electric last-mile routes"
+    },
+    "whyChooseEyebrow": "Why riders choose us",
+    "whyChooseTitleStart": "Reliable local rides",
+    "whyChooseTitleHighlight": "built around your daily routes.",
+    "benefits": [
+      {
+        "title": "Affordable fares",
+        "description": "Predictable pricing for everyday short-distance city travel."
+      },
+      {
+        "title": "Electric rides",
+        "description": "Cleaner local mobility powered by compact electric vehicles."
+      },
+      {
+        "title": "Trusted drivers",
+        "description": "Verified local drivers and ride history for peace of mind."
+      }
+    ],
+    "popularRoutes": "Popular routes",
+    "routesTitle": "Quick hops across your daily local map.",
+    "routes": {
+      "metroToMarket": "Metro to Market",
+      "campusLoop": "Campus Loop",
+      "stationPickup": "Station Pickup",
+      "hospitalRoute": "Hospital Route"
+    }
+  },
   "support": {
     "title": "Need Help?",
     "description": "Our support team is here to assist you 24/7",
@@ -42,7 +95,7 @@
     "chat": {
       "title": "Live Chat",
       "description": "Chat with our support team instantly",
-      "button": "Start Chat"
+      "button": "Ask Queries"
     },
     "email": {
       "title": "Email Support",
@@ -55,6 +108,7 @@
   },
   "booking": {
     "title": "Book an E-Rickshaw",
+    "subtitle": "Choose pickup and drop points, see nearby drivers, and confirm a clean local ride in a few taps.",
     "bookYourRide": "Book Your Ride",
     "nearbyDrivers": "Nearby Drivers",
     "noDrivers": "No drivers available",
@@ -85,7 +139,7 @@
   },
   "chat": {
     "title": "Chat & Share Location",
-    "chatWithContact": "Chat with {name}",
+    "chatWithContact": "Chat with {{name}}",
     "shareLocation": "Share your location",
     "startChat": "Chat & Share Location",
     "contacts": "Contacts",
@@ -94,6 +148,19 @@
     "online": "Online",
     "yourLocation": "Your Location",
     "locationReceived": "I've received your location. Thanks for sharing!",
-    "typingPlaceholder": "Type a message..."
+    "typingPlaceholder": "Type a message...",
+    "responses": {
+      "gotIt": "Got it! How are you doing today?",
+      "thanks": "Thanks for the message!",
+      "seeSoon": "I'll see you soon.",
+      "soundsGreat": "That sounds great! Let's meet up.",
+      "onMyWay": "I'm on my way to that location now."
+    }
+  },
+  "footer": {
+    "tagline": "Cleaner rides for everyday local travel.",
+    "electricMobility": "Electric mobility",
+    "trustedDrivers": "Trusted drivers",
+    "copyright": "Copyright 2025 The Last Mile. All rights reserved."
   }
 } 

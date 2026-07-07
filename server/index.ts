@@ -71,17 +71,18 @@ let server;
     });
   }
 
-  // Ensure we're binding to the PORT that Render expects (default 10000)
-  const PORT = parseInt(process.env.PORT || "10000", 10);
-  
+  // Bind locally for development; production entrypoints handle deployment ports separately.
+  const PORT = parseInt(process.env.PORT || "5000", 10);
+  const HOST = "127.0.0.1";
+
   // Log before attempting to start
-  console.log(`BINDING: Attempting to bind to port ${PORT} on host 0.0.0.0...`);
-  
+  console.log(`BINDING: Attempting to bind to port ${PORT} on host ${HOST}...`);
+
   try {
-    // Explicitly listen on 0.0.0.0 (all network interfaces)
-    server.listen(PORT, "0.0.0.0", () => {
-      console.log(`SERVER STARTED: Successfully bound to port ${PORT} on host 0.0.0.0`);
-      log(`Server is running at http://0.0.0.0:${PORT}`);
+    // Bind only to localhost during local development.
+    server.listen(PORT, HOST, () => {
+      console.log(`SERVER STARTED: Successfully bound to port ${PORT} on host ${HOST}`);
+      log(`Server is running at http://${HOST}:${PORT}`);
     });
   } catch (error) {
     console.error(`FATAL ERROR: Could not bind to port ${PORT}:`, error);

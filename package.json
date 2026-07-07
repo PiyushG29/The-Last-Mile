@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "license": "MIT",  "scripts": {
-    "dev": "npx tsx server/index.ts",
+    "dev": "cross-env NODE_ENV=development PORT=5000 npx tsx server/index.ts",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
     "build": "vite build && esbuild server/index.ts server/routes.ts server/auth.ts server/db.ts server/storage.ts --platform=node --packages=external --bundle --format=esm --outdir=build && cpy \"shared/**/*\" build/shared && cpy \"client/public/**/*\" build/",

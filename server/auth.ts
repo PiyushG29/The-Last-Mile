@@ -41,6 +41,20 @@ export function setupAuth(app: Express) {
   app.use(passport.initialize());
   app.use(passport.session());
 
+  if (process.env.NODE_ENV === "development") {
+    void (async () => {
+      const existingUser = await storage.getUserByUsername("demo");
+      if (!existingUser) {
+        await storage.createUser({
+          username: "demo",
+          password: await hashPassword("password123"),
+          name: "Demo Rider",
+          phone: "9999999999",
+        });
+      }
+    })();
+  }
+
   passport.use(
     new LocalStrategy(async (username, password, done) => {
       const user = await storage.getUserByUsername(username);

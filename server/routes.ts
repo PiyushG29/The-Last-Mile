@@ -15,6 +15,46 @@ const driverLocations = new Map<number, { lat: number; lng: number }>();
 export async function registerRoutes(app: Express): Promise<Server> {
   setupAuth(app);
 
+  app.post("/api/payments/create-intent", async (req, res) => {
+    if (!req.isAuthenticated()) return res.sendStatus(401);
+
+    const amount = Number(req.body.amount);
+    const currency = typeof req.body.currency === "string" ? req.body.currency : "inr";
+
+    if (!Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ message: "A valid amount is required." });
+    }
+
+    if (!process.env.STRIPE_SECRET_KEY) {
+      return res.json({ demo: true });
+    }
+
+    const body = new URLSearchParams();
+    body.set("amount", Math.round(amount * 100).toString());
+    body.set("currency", currency);
+    body.set("automatic_payment_methods[enabled]", "true");
+    body.set("metadata[userId]", String(req.user!.id));
+
+    const stripeResponse = await fetch("https://api.stripe.com/v1/payment_intents", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${process.env.STRIPE_SECRET_KEY}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body,
+    });
+
+    const paymentIntent = await stripeResponse.json();
+
+    if (!stripeResponse.ok) {
+      return res.status(stripeResponse.status).json({
+        message: paymentIntent.error?.message || "Unable to create payment intent.",
+      });
+    }
+
+    res.json({ clientSecret: paymentIntent.client_secret });
+  });
+
   // Get nearby drivers
   app.get("/api/drivers", async (req, res) => {
     const drivers = await storage.getActiveDrivers();

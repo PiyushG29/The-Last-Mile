@@ -32,7 +32,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <div className="min-h-screen bg-background">
+        <div className="min-h-screen bg-gradient-hero text-foreground">
           <Navbar />
           <Router />
         </div>

@@ -148,11 +148,11 @@ export default function ChatPage() {
       // Simulate contact response
       setTimeout(() => {
         const responses = [
-          "Got it! How are you doing today?",
-          "Thanks for the message!",
-          "I'll see you soon.",
-          "That sounds great! Let's meet up.",
-          "I'm on my way to that location now."
+          t("chat.responses.gotIt"),
+          t("chat.responses.thanks"),
+          t("chat.responses.seeSoon"),
+          t("chat.responses.soundsGreat"),
+          t("chat.responses.onMyWay"),
         ];
         
         const randomResponse = responses[Math.floor(Math.random() * responses.length)];
@@ -177,24 +177,23 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="px-4 pb-16 pt-32 md:pt-36">
       <div className="max-w-6xl mx-auto">
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+          className="mb-8 font-display text-4xl font-bold text-gradient-primary md:text-6xl"
         >
           {t("chat.title")}
         </motion.h1>
 
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
           <motion.div
-            className="lg:col-span-2"
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="h-full flex flex-col">
+            <Card className="h-full flex flex-col border-primary/25 bg-gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>
                   {selectedContact
@@ -205,7 +204,7 @@ export default function ChatPage() {
               <CardContent className="flex-grow flex flex-col">
                 {selectedContact ? (
                   <>
-                    <div className="flex-grow mb-4 overflow-y-auto max-h-[400px] space-y-4">
+                    <div className="mb-4 max-h-[260px] min-h-[220px] flex-grow space-y-4 overflow-y-auto rounded-md border border-border/60 bg-background/45 p-4">
                       {messages
                         .filter(m => m.contactId === selectedContact.id)
                         .map((message) => (
@@ -278,7 +277,7 @@ export default function ChatPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card>
+            <Card className="border-electric/25 bg-gradient-card shadow-card">
               <CardHeader>
                 <CardTitle>{t("chat.contacts")}</CardTitle>
               </CardHeader>

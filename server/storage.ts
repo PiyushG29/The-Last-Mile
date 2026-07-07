@@ -4,8 +4,10 @@ import { db } from "./db";
 import { eq } from "drizzle-orm";
 import connectPg from "connect-pg-simple";
 import { pool } from "./db";
+import createMemoryStore from "memorystore";
 
 const PostgresSessionStore = connectPg(session);
+const MemoryStore = createMemoryStore(session);
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
@@ -86,6 +88,73 @@ export class DatabaseStorage implements IStorage {
   }
 }
 
+export class MemStorage implements IStorage {
+  private users = new Map<number, User>();
+  private bookings = new Map<number, Booking>();
+  private userId = 1;
+  private bookingId = 1;
+  sessionStore: session.Store;
+
+  constructor() {
+    this.sessionStore = new MemoryStore({
+      checkPeriod: 86400000,
+    });
+  }
+
+  async getUser(id: number): Promise<User | undefined> {
+    return this.users.get(id);
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    return Array.from(this.users.values()).find((user) => user.username === username);
+  }
+
+  async createUser(insertUser: InsertUser): Promise<User> {
+    const user: User = {
+      id: this.userId++,
+      ...insertUser,
+    };
+    this.users.set(user.id, user);
+    return user;
+  }
+
+  async getDrivers(): Promise<Driver[]> {
+    return MOCK_DRIVERS;
+  }
+
+  async getActiveDrivers(): Promise<Driver[]> {
+    return MOCK_DRIVERS.filter((driver) => driver.active);
+  }
+
+  async getDriver(id: number): Promise<Driver | undefined> {
+    return MOCK_DRIVERS.find((driver) => driver.id === id);
+  }
+
+  async createBooking(booking: Omit<Booking, "id" | "status" | "createdAt">): Promise<Booking> {
+    const newBooking: Booking = {
+      id: this.bookingId++,
+      status: "pending",
+      createdAt: new Date(),
+      ...booking,
+    };
+    this.bookings.set(newBooking.id, newBooking);
+    return newBooking;
+  }
+
+  async getUserBookings(userId: number): Promise<Booking[]> {
+    return Array.from(this.bookings.values())
+      .filter((booking) => booking.userId === userId)
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+  }
+
+  async updateBookingStatus(id: number, status: string): Promise<void> {
+    const booking = this.bookings.get(id);
+    if (booking) {
+      this.bookings.set(id, { ...booking, status });
+    }
+  }
+}
+
 // Keep the mock drivers data for now
 const MOCK_DRIVERS: Driver[] = [
   {
@@ -123,4 +192,5 @@ const MOCK_DRIVERS: Driver[] = [
   },
 ];
 
-export const storage = new DatabaseStorage();
+export const storage =
+  process.env.NODE_ENV === "development" ? new MemStorage() : new DatabaseStorage();

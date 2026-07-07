@@ -161,7 +161,7 @@ export default function ChatSupportPage() {
                     {FAQS.map((faq) => (
                       <Badge 
                         key={faq.id} 
-                        className="cursor-pointer bg-secondary/50 hover:bg-primary hover:text-white transition-colors py-2"
+                        className="cursor-pointer bg-sky-100 px-4 py-2 text-sky-900 shadow-sm transition-colors hover:bg-primary hover:text-primary-foreground dark:bg-sky-400/20 dark:text-sky-100"
                         onClick={() => handleFaqClick(faq)}
                       >
                         {faq.question}

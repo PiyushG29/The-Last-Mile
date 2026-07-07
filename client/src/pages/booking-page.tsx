@@ -3,13 +3,14 @@ import { Driver } from "@shared/schema";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import BookingForm from "@/components/booking-form";
-import { Loader2, MapPin } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useDriverLocations } from "@/hooks/use-driver-locations";
 import Map from "@/components/map";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
+import paperPlaneGif from "./assets/paper-plane.gif";
+import driverGif from "./assets/driver.gif";
 
 const container = {
   hidden: { opacity: 0 },
@@ -38,16 +39,24 @@ export default function BookingPage() {
     <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      className="container mx-auto px-4 py-8"
+      className="px-4 pb-16 pt-32 md:pt-36"
     >
-      <div className="max-w-6xl mx-auto">
+      <div className="container mx-auto max-w-6xl">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-4xl font-bold mb-8 bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent"
+          className="mb-4 font-display text-4xl font-bold text-gradient-primary md:text-6xl"
         >
           {t("booking.title")}
         </motion.h1>
+        <motion.p
+          initial={{ opacity: 0, y: -12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="mb-8 max-w-none text-lg text-muted-foreground lg:whitespace-nowrap"
+        >
+          {t("booking.subtitle")}
+        </motion.p>
 
         <div className="grid lg:grid-cols-3 gap-8">
           <motion.div 
@@ -56,11 +65,16 @@ export default function BookingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="overflow-hidden border-primary/20 hover:border-primary/40 transition-colors duration-300">
-              <CardHeader>
-                <CardTitle>{t("booking.bookYourRide")}</CardTitle>
+            <Card className="overflow-hidden border-primary/25 bg-gradient-card shadow-card transition-all duration-300 hover:border-primary/45 hover:shadow-glow-primary">
+              <CardHeader className="border-b border-border/60 bg-background/35">
+                <CardTitle className="flex items-center gap-3 font-display">
+                  <span className="grid h-12 w-12 place-items-center rounded-md bg-background/70">
+                    <img src={paperPlaneGif} alt="" className="h-10 w-10 object-contain" />
+                  </span>
+                  {t("booking.bookYourRide")}
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 <BookingForm />
               </CardContent>
             </Card>
@@ -72,11 +86,16 @@ export default function BookingPage() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
           >
-            <Card className="border-primary/20 hover:border-primary/40 transition-colors duration-300">
-              <CardHeader>
-                <CardTitle>{t("booking.nearbyDrivers")}</CardTitle>
+            <Card className="border-electric/25 bg-gradient-card shadow-card transition-all duration-300 hover:border-electric/45 hover:shadow-glow-electric">
+              <CardHeader className="border-b border-border/60 bg-background/35">
+                <CardTitle className="flex items-center gap-3 font-display">
+                  <span className="grid h-12 w-12 place-items-center rounded-md bg-background/70">
+                    <img src={driverGif} alt="" className="h-10 w-10 object-contain" />
+                  </span>
+                  {t("booking.nearbyDrivers")}
+                </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="p-6">
                 {isLoading ? (
                   <motion.div 
                     variants={container}
@@ -136,7 +155,7 @@ export default function BookingPage() {
                           key={driver.id}
                           variants={item}
                           whileHover={{ scale: 1.02 }}
-                          className="flex items-center space-x-4 p-4 bg-gradient-to-r from-primary/5 to-primary/10 rounded-lg hover:from-primary/10 hover:to-primary/15 transition-all duration-300"
+                          className="flex items-center space-x-4 rounded-md border border-border/60 bg-background/55 p-4 shadow-sm transition-all duration-300 hover:border-primary/35 hover:bg-primary/10"
                         >
                           <Avatar>
                             <AvatarImage src={driver.avatar} alt={driver.name} />
@@ -149,9 +168,9 @@ export default function BookingPage() {
                             </p>
                           </div>
                           {driver.active && (
-                            <div className="ml-auto flex items-center text-sm text-green-600">
+                            <div className="ml-auto flex items-center text-sm font-medium text-primary">
                               <motion.span 
-                                className="h-2 w-2 rounded-full bg-green-600 mr-2"
+                                className="mr-2 h-2 w-2 rounded-full bg-primary"
                                 animate={{ scale: [1, 1.2, 1] }}
                                 transition={{ duration: 2, repeat: Infinity }}
                               />
@@ -165,6 +184,7 @@ export default function BookingPage() {
                 )}
               </CardContent>
             </Card>
+
           </motion.div>
         </div>
       </div>

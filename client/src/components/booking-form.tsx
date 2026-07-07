@@ -9,11 +9,13 @@ import { useMutation } from "@tanstack/react-query";
 import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { calculateDistance, calculateFare, formatAddress } from "@/lib/maps";
-import { Loader2, MapPin, IndianRupee } from "lucide-react";
+import { Loader2, MapPin, IndianRupee, Navigation } from "lucide-react";
 import { useLocation } from "wouter";
 import Map from "./map";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+import { z } from "zod";
+import { PaymentPopup } from "@/components/payment-popup";
 
 type Location = {
   lat: number;
@@ -21,12 +23,15 @@ type Location = {
   address?: string;
 };
 
+type BookingFormValues = z.infer<typeof insertBookingSchema>;
+
 export default function BookingForm() {
   const { toast } = useToast();
   const [, setLocation] = useLocation();
   const [pickupLocation, setPickupLocation] = useState<Location>();
   const [dropLocation, setDropLocation] = useState<Location>();
   const [isSelectingDrop, setIsSelectingDrop] = useState(false);
+  const [pendingBooking, setPendingBooking] = useState<BookingFormValues | null>(null);
   const { t } = useTranslation();
 
   const form = useForm({
@@ -40,8 +45,14 @@ export default function BookingForm() {
     },
   });
 
+  const handlePaymentComplete = () => {
+    if (!pendingBooking) return;
+    bookingMutation.mutate(pendingBooking);
+    setPendingBooking(null);
+  };
+
   const bookingMutation = useMutation({
-    mutationFn: async (data: typeof form.getValues) => {
+    mutationFn: async (data: BookingFormValues) => {
       const res = await apiRequest("POST", "/api/bookings", data);
       return res.json();
     },
@@ -91,10 +102,10 @@ export default function BookingForm() {
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => bookingMutation.mutate(data))}
+        onSubmit={form.handleSubmit((data) => setPendingBooking(data))}
         className="space-y-6"
       >
-        <div className="space-y-4">
+        <div className="space-y-5">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -124,11 +135,11 @@ export default function BookingForm() {
             transition={{ delay: 0.3 }}
           >
             <motion.div 
-              className="flex items-start space-x-2"
+              className="flex items-start gap-3 rounded-md border border-border/60 bg-background/55 p-4"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="bg-primary/10 p-2 rounded-full">
+              <div className="rounded-md bg-primary/10 p-2">
                 <MapPin className="h-5 w-5 text-primary" />
               </div>
               <div>
@@ -140,12 +151,12 @@ export default function BookingForm() {
             </motion.div>
 
             <motion.div 
-              className="flex items-start space-x-2"
+              className="flex items-start gap-3 rounded-md border border-border/60 bg-background/55 p-4"
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
             >
-              <div className="bg-destructive/10 p-2 rounded-full">
-                <MapPin className="h-5 w-5 text-destructive" />
+              <div className="rounded-md bg-electric/10 p-2">
+                <Navigation className="h-5 w-5 text-electric" />
               </div>
               <div>
                 <div className="font-medium">{t("booking.dropLocation")}</div>
@@ -163,10 +174,10 @@ export default function BookingForm() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <Card className="p-4 bg-gradient-to-r from-primary/5 to-primary/10 hover:from-primary/10 hover:to-primary/15 transition-colors duration-300">
+            <Card className="border-accent/30 bg-gradient-card p-4 shadow-glow-accent transition-all duration-300 hover:border-accent/50">
               <div className="flex items-center justify-between">
                 <div className="font-medium">{t("booking.estimatedFare")}</div>
-                <div className="text-lg font-semibold flex items-center">
+                <div className="flex items-center font-display text-xl font-semibold text-gradient-accent">
                   <IndianRupee className="h-4 w-4 mr-1" />
                   {form.getValues("fare")}
                 </div>
@@ -181,7 +192,7 @@ export default function BookingForm() {
         >
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 transition-all duration-300"
+            className="w-full bg-primary text-primary-foreground shadow-glow-primary transition-all duration-300 hover:bg-primary/90 hover:shadow-[0_0_50px_hsl(var(--primary)/0.28)]"
             disabled={bookingMutation.isPending || !pickupLocation || !dropLocation}
           >
             {bookingMutation.isPending ? (
@@ -196,6 +207,13 @@ export default function BookingForm() {
           </Button>
         </motion.div>
       </form>
+      {pendingBooking && (
+        <PaymentPopup
+          amount={pendingBooking.fare}
+          onClose={() => setPendingBooking(null)}
+          onPaid={handlePaymentComplete}
+        />
+      )}
     </Form>
   );
 }
