@@ -1,6 +1,8 @@
 # The Last Mile
 
 A modern web application built with React, Express, and PostgreSQL.
+Test Username: Admin001
+Test Password: admin001
 
 ## Project Setup
 
